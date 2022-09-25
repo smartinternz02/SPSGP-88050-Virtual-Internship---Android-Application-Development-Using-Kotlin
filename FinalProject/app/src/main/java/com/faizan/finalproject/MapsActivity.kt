@@ -39,7 +39,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var latitude : Double = 0.toDouble()
     private var longitude : Double = 0.toDouble()
 
-
     private lateinit var mLastLocation : Location
     private var mMarker : Marker ?= null
 
@@ -93,7 +92,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         bottom_Navigation_view.setOnNavigationItemSelectedListener { item ->
-            if(item.itemId == R.id.action_market) nearByPlace("market")
+            if(item.itemId == R.id.action_bakery) nearByPlace("bakery")
             else if(item.itemId == R.id.action_restaurant) nearByPlace("restaurants")
             true
         }
@@ -126,8 +125,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             }
                         }
 
-                        if(typePlace.equals("market"))
-                            markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_shopping_cart_24))
+                        if(typePlace.equals("bakery"))
+                            markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_fastfood_24))
                         else if(typePlace.equals("restaurants"))
                             markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_restaurant_24))
                         else
@@ -149,7 +148,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getUrl(latitude: Double, longitude: Double, typePlace: String): String {
         val googlePlaceUrl = StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
-        googlePlaceUrl.append("?keyword=cruise&location=$latitude,$longitude")
+        googlePlaceUrl.append("?location=$latitude,$longitude")
         googlePlaceUrl.append(("&radius=10000"))
         googlePlaceUrl.append(("&type=$typePlace"))
         googlePlaceUrl.append("&key=AIzaSyAeqtUv4C_Z2weXnYmZjDj4blqa58YwPbg")
@@ -186,7 +185,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         locationRequest.interval = 5000
         locationRequest.fastestInterval = 3000
         locationRequest.smallestDisplacement = 10f
-
     }
 
     private fun checkLocationPermission(): Boolean {

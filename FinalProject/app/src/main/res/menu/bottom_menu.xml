@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_market"
+        android:id="@+id/action_bakery"
         android:enabled="true"
-        android:title="@string/market"
-        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:title="@string/bakery"
+        android:icon="@drawable/ic_baseline_fastfood_24"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_restaurant"

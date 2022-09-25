@@ -1,7 +1,10 @@
 package com.faizan.finalproject
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +12,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.faizan.finalproject.Common.Common
@@ -20,14 +22,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.faizan.finalproject.databinding.ActivityMapsBinding
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.gms.maps.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +38,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var latitude : Double = 0.toDouble()
     private var longitude : Double = 0.toDouble()
+
 
     private lateinit var mLastLocation : Location
     private var mMarker : Marker ?= null
@@ -85,9 +84,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, LocationCallback(), Looper.myLooper())
         }
+
+        fusedLocationProviderClient?.lastLocation!!.addOnCompleteListener(this) { task ->
+            if (task.isSuccessful && task.result != null) {
+                latitude = (task.result)!!.latitude
+                longitude = (task.result)!!.longitude
+            }
+        }
+
         bottom_Navigation_view.setOnNavigationItemSelectedListener { item ->
             if(item.itemId == R.id.action_market) nearByPlace("market")
-            else if(item.itemId == R.id.action_restaurant) nearByPlace("restaurant")
+            else if(item.itemId == R.id.action_restaurant) nearByPlace("restaurants")
             true
         }
     }
@@ -110,10 +117,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         markerOptions.position(latLng)
                         markerOptions.title(placeName)
 
+                        fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+                            return ContextCompat.getDrawable(context, vectorResId)?.run {
+                                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+                                val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+                                draw(Canvas(bitmap))
+                                BitmapDescriptorFactory.fromBitmap(bitmap)
+                            }
+                        }
+
                         if(typePlace.equals("market"))
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_market)).title(placeName)
+                            markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_shopping_cart_24))
                         else if(typePlace.equals("restaurant"))
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant)).title(placeName)
+                            markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_restaurant_24))
                         else
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                         markerOptions.snippet(latLng.toString())
@@ -207,7 +223,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                 }
                 else {
-                    Toast.makeText(this,"Location Not Enabled",Toast.LENGTH_SHORT)
+                    Toast.makeText(this,"Location Not Enabled",Toast.LENGTH_SHORT).show()
                 }
             }
         }

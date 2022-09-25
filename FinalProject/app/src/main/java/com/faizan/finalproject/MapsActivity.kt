@@ -93,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         bottom_Navigation_view.setOnNavigationItemSelectedListener { item ->
             if(item.itemId == R.id.action_bakery) nearByPlace("bakery")
-            else if(item.itemId == R.id.action_restaurant) nearByPlace("restaurants")
+            else if(item.itemId == R.id.action_restaurant) nearByPlace("restaurant")
             true
         }
     }
@@ -127,7 +127,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         if(typePlace.equals("bakery"))
                             markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_fastfood_24))
-                        else if(typePlace.equals("restaurants"))
+                        else if(typePlace.equals("restaurant"))
                             markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_restaurant_24))
                         else
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))

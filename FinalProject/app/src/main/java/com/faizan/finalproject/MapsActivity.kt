@@ -128,7 +128,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         if(typePlace.equals("market"))
                             markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_shopping_cart_24))
-                        else if(typePlace.equals("restaurant"))
+                        else if(typePlace.equals("restaurants"))
                             markerOptions.icon(bitmapDescriptorFromVector(this@MapsActivity, R.drawable.ic_baseline_restaurant_24))
                         else
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
